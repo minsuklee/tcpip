@@ -43,7 +43,7 @@ main()
 		error_print("Another TCP/IP is Running at 0x$");
 		printhex(tmp);
 		dos_print(".\r$");
-		return;
+		return -1;
 	}
 
 // Arguement Processing
@@ -60,7 +60,7 @@ main()
 	kernel_int = get_arg(&argv, &arglen, 16);
 	if ((kernel_int < 0x60) || (kernel_int > 0x7e)) {
 usage:		dos_print("Usage: TCPIP sw_int(0x60-0x7E) no_of_channel(1-20)\n\r$");
-		return;
+		return -1;
 	}
 	if (skip_blank(&argv, &arglen) < 0)	// Set as Default
 		goto arg_ok;
@@ -78,7 +78,7 @@ arg_ok:	// Initialize System Resources
 	end_of_tsr = init_buffer(&__eop);
 
 	if (init_driver() < 0)			// Init Packet Drivers
-		return;
+		return -1;
 
 	init_timer();
 
