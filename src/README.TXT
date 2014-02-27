@@ -7,9 +7,9 @@ so don't expect clean compilation with contemporary tools.
 
 This source is BSD licensed.
 I wrote whole code from scratch.
-(Yes, some of header were C&P'ed from ..., you know.)
+(Yes, some of headers were C&P'ed from ..., you know.)
 
-IMIGE Systems Inc., an ancient companyI worked for
+IMIGE Systems Inc., an ancient company I worked for
 does not exist on earth any more.
 
 Let me know any issues on the source.
