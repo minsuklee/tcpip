@@ -24,7 +24,7 @@ int num_socket = 4;			// Number of socket
 int if_isr();	// Interface Interrupt Service Routine
 int sigisr();	// Signalling Interrupt Stub Routine
 
-void
+int
 main()
 {
 	extern unsigned char __eop;
@@ -102,6 +102,8 @@ arg_ok:	// Initialize System Resources
 	asm	int	21h		// DOS Function Call
 
 	// CONTROL NEVER REACH THIS LINE
+	
+	return 0;
 }
 
 int
