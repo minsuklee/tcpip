@@ -5,6 +5,8 @@
 #
 #  Author : Minsuk Lee (ykhl1itj@gmail.com)
 #
+# This naive^^ makefile if for Borland C make
+#
 all:
 	@cd library
 	#make -DMODEL=l
