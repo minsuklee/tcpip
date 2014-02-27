@@ -1,0 +1,181 @@
+/******************************************************
+ * IMIGE/TCP, Copyright (C) 1995, IMIGE Systems Inc.
+ *
+ *  All rights reserved.
+ *  This software is under BSD license. see LICENSE.txt
+ *
+ *  Author : Minsuk Lee (ykhl1itj@gmail.com)
+ ******************************************************/
+
+#include "imigetsr.h"
+
+#define DUMP_ETHERNET
+#define DUMP_IP
+
+void print_tcp_state(int state);
+void print_tcp_type(int flag);
+void print_ip_addr(unsigned long ipadr);
+
+#define pkt_eth		((struct I3E8023   *)packet)
+#define pkt_arp		((struct RFC826    *)packet)
+#define pkt_ip		((struct RFC791    *)packet)
+#define pkt_icmp	((struct RFC792    *)packet)
+#define pkt_echo	((struct ICMP_ECHO *)packet)
+#define pkt_tcp		((struct RFC793    *)packet)
+#define pkt_udp		((struct RFC768    *)packet)
+
+void
+print_packet(void *packet, int size)
+{
+	unsigned char *data = NULL;
+	int i;
+
+#ifdef DUMP_ETHERNET
+	rprintf("\nETH Dest=");
+	print_ether_addr(pkt_eth->destination);
+	rprintf(", SRC=");
+	print_ether_addr(pkt_eth->source);
+	rprintf(", Proto=");
+	switch (pkt_eth->protocol) {
+		case ETIP  : rprintf("IP");  break;
+		case ETADR : rprintf("ARP"); break;
+		default :
+			rprintf("%X", pkt_eth->protocol);
+	}
+	rprintf("\n");
+#endif
+	if (pkt_eth->protocol == ETADR) {
+		rprintf("HARDWARE TYPE : ");
+		switch (pkt_arp->hw_type) {
+			case 0x100 : rprintf("ETHER");  break;
+			case 0x600 : rprintf("8023");   break;
+			case 0x700 : rprintf("ARCNET"); break;
+			case 0xB00 : rprintf("LTALK");  break;
+			default :
+				rprintf("%X", pkt_arp->hw_type);
+		}
+		rprintf(",  PROTOCOL : ");
+		switch (pkt_arp->protocol) {
+			case 0x0008 : rprintf("IP"); break;
+			default :
+				rprintf("%X", pkt_arp->protocol);
+		}
+		rprintf(",  OPCODE : ");
+		switch (pkt_arp->opcode) {
+			case 0x0100 : rprintf("ARPREQ"); break;
+			case 0x0200 : rprintf("ARPREP"); break;
+			default :
+				rprintf("%X", pkt_arp->opcode);
+		}
+		rprintf("\n    S-"); print_ether_addr(pkt_arp->my_hw_addr);
+		rprintf("("); print_ip_addr(pkt_arp->my_proto_addr); rprintf(") ");
+		rprintf("T-"); print_ether_addr(pkt_arp->his_hw_addr);
+		rprintf("("); print_ip_addr(pkt_arp->his_proto_addr); rprintf(")\n\n");
+		return;
+	}
+#ifdef DUMP_IP
+	rprintf("IP  lv : 0x%02X, srv : 0x%02X,  len : %d(%d),  ",
+		pkt_ip->hdr_len_ver, pkt_ip->service_type, pkt_ip->total_len, bswap(pkt_ip->total_len));
+	rprintf("id : 0x%04X\n    frag : 0x%04X, ttl : 0x%02X, PROTOCOL : ",
+		bswap(pkt_ip->packet_id), pkt_ip->frag_offset, pkt_ip->time_to_live);
+	switch (pkt_ip->transport) {
+		case IPPROTO_ICMP : rprintf("ICMP"); break;
+		case IPPROTO_TCP : rprintf("TCP"); break;
+		case IPPROTO_UDP : rprintf("UDP"); break;
+		default :
+			rprintf("%X", (unsigned)pkt_ip->transport);
+	}
+	rprintf(",  checksum : 0x%04X\n", pkt_ip->checksum);
+#endif
+	rprintf("    SRC : %08lX(", pkt_ip->source); print_ip_addr(pkt_ip->source);
+	rprintf("), DEST : %08lX(", pkt_ip->destination); print_ip_addr(pkt_ip->destination);
+	rprintf(")\n");
+	if (pkt_ip->transport == IPPROTO_ICMP) {
+		rprintf("ICMP type:");
+		switch (pkt_icmp->packet_type) {
+			case ECHO_REPLY : rprintf("ECHO_REP"); break;
+			case ECHO_REQUEST : rprintf("ECHO_REQ"); break;
+			case GATEWAY_REDIRECT : rprintf("REDIRECT"); break;
+			case DEST_UNREACHABLE : rprintf("DEST_UNREACH"); break;
+			default : rprintf("%d", pkt_icmp->packet_type); break;
+		}
+		rprintf(", code:%d, chksum:%04x", pkt_icmp->opcode, pkt_icmp->checksum);
+		if ((pkt_icmp->packet_type == ECHO_REPLY) ||
+		    (pkt_icmp->packet_type == ECHO_REQUEST)) {
+			rprintf(", id:%d, seq:%d", pkt_echo->identification, pkt_echo->sequence);
+			data = (unsigned char *)packet + ECHO_PLEN;
+			size -= ECHO_PLEN;
+		}
+		rprintf("\n");
+	} else if (pkt_ip->transport == IPPROTO_TCP) {
+		rprintf("TCP sport:%d, dport:%d, seq:%ld, ack:%ld, offset:%d\n",
+			bswap(pkt_tcp->source), bswap(pkt_tcp->destination),
+			lswap(pkt_tcp->sequence), lswap(pkt_tcp->acknowledge), pkt_tcp->offset * 4);
+		rprintf("    twin:%d, turp:%d, chksum:%04X, tflag:",
+			bswap(pkt_tcp->window_adv), bswap(pkt_tcp->urgent_ptr), pkt_tcp->checksum);
+		print_tcp_type(pkt_tcp->flags);
+		if (pkt_tcp->offset == 6) {
+			rprintf("\n    Option - Code:%d, Len:%d, Value:%d",
+				pkt_tcp->option_code, pkt_tcp->option_len, bswap(pkt_tcp->max_segment));
+		}
+		rprintf("\n");
+		data = (unsigned char *)packet + IP_PLEN + pkt_tcp->offset * 4;
+		size -= (IP_PLEN + pkt_tcp->offset * 4);
+	} else if (pkt_ip->transport == IPPROTO_UDP) {
+		rprintf("UDP sport:%d, dport:%d, len:%d(%d), chksum:%04X\n",
+			bswap(pkt_udp->source), bswap(pkt_udp->destination),
+			pkt_udp->length, bswap(pkt_udp->length), pkt_udp->checksum);
+		size -= UDP_PLEN;
+	}
+	if (data) {
+pdata:		if (size)
+			rprintf("DAT ");
+		for (i = 0; i < min(20, size); i++, data++)
+			rprintf("%02X ", *data);
+		rprintf("\n");
+	}
+}
+
+void
+print_ether_addr(unsigned char *eadr)
+{
+	rprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+		eadr[0], eadr[1], eadr[2], eadr[3], eadr[4], eadr[5] );
+}
+
+void
+print_ip_addr(unsigned long ipadr)
+{
+	unsigned char *iadr = (unsigned char *)(&ipadr);
+	rprintf("%d.%d.%d.%d", iadr[0], iadr[1], iadr[2], iadr[3]);
+}
+
+void
+print_tcp_state(int state)
+{
+	switch (state) {
+		case TCPS_CLOSED :	rprintf("TCLOSED"); break;
+		case TCPS_LISTEN :	rprintf("TLISTEN"); break;
+		case TCPS_SYN_SENT :	rprintf("SYNSENT"); break;
+		case TCPS_SYN_RECVD :	rprintf("SYNRCVD"); break;
+		case TCPS_ESTABLISHED :	rprintf("ESTABED"); break;
+		case TCPS_CLOSE_WAIT :	rprintf("CL_WAIT"); break;
+		case TCPS_FIN_WAIT_1 :	rprintf("FIWAIT1"); break;
+		case TCPS_CLOSING :	rprintf("CLOSING"); break;
+		case TCPS_LAST_ACK :	rprintf("LASTACK"); break;
+		case TCPS_FIN_WAIT_2 :	rprintf("FIWAIT2"); break;
+		case TCPS_TIME_WAIT :	rprintf("TIMWAIT"); break;
+		default :		rprintf("UNKNOWN"); break;
+	}
+}
+
+void
+print_tcp_type(int flag)
+{
+	if (flag & TH_FIN)	rprintf("FIN ");
+	if (flag & TH_SYN)	rprintf("SYN ");
+	if (flag & TH_RST)	rprintf("RST ");
+	if (flag & TH_PUSH)	rprintf("PUSH ");
+	if (flag & TH_ACK)	rprintf("ACK ");
+	if (flag & TH_URG)	rprintf("URG ");
+}

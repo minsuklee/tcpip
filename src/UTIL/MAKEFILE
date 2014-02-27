@@ -1,0 +1,47 @@
+#   IMIGE/TCP, Copyright (C) 1995, IMIGE Systems Inc.
+#
+# This makefile need Borland C++ 3.1
+#
+
+MODEL = l
+
+TC = C:\BORLANDC
+TCDIR = $(TC)\BIN
+TCLIB = $(TC)\LIB
+
+#WORKDIR = D:\MSLEE\IMIGE\NEWTCP
+WORKDIR = ..
+INC = -I$(WORKDIR)\INCLUDE -I$(WORKDIR)\LIBRARY -I$(WORKDIR)\KERNEL
+DEFINE =
+COPTIONS = -c -m$(MODEL) -O2 -G -f- $(INC) $(DEFINE)
+CC = $(TCDIR)\BCC
+
+AOPTIONS = /t
+ASM = $(TCDIR)\TASM
+
+LINK = $(TCDIR)\TLINK
+
+APPLIB = $(WORKDIR)\library\IMIGE_T$(MODEL).LIB
+
+all : startup.exe unload.exe netstat.exe stat.exe tcpcfg.exe ping.exe
+#conf.exe
+.obj.exe :
+	$(LINK) /x c0$(MODEL) $*, $*,, $(APPLIB) c$(MODEL)
+
+.asm.obj:
+	$(ASM) $(AOPTIONS) $*;
+
+.c.obj:
+	$(CC) $(COPTIONS) $*.c
+
+clean :
+	@if exist *.~*  erase *.~*
+	@if exist *.obj erase *.obj
+	@if exist *.map erase *.map
+	@if exist *.exe erase *.exe
+	@if exist *.com erase *.com
+	@if exist *.lib erase *.lib
+	@if exist *.bak erase *.bak
+	@if exist *.lst erase *.lst
+	@if exist xxx erase xxx
+

@@ -1,0 +1,43 @@
+# This makefile need Borland C++ 3.1
+
+TC = C:\BORLANDC
+TCDIR = $(TC)\BIN
+TCLIB = $(TC)\LIB
+
+#WORKDIR = d:\mslee\imige\newtcp
+WORKDIR = ..
+INC = -I. -I$(WORKDIR)\INCLUDE
+DEFINE =
+MODEL = l
+COPTIONS = -O2 -m$(MODEL) -G -f- $(INC) $(DEFINE)
+CC = $(TCDIR)\BCC
+
+AOPTIONS = /t
+ASM = $(TCDIR)\TASM
+
+LIBS = $(WORKDIR)\LIBRARY\IMIGE_T$(MODEL)
+LINK = $(TCDIR)\TLINK
+
+all : tn.exe
+
+tn.exe : main.obj emu.obj hw_emu.obj telnet.obj printf.obj \
+	 key.obj kermit.obj stat.obj ring.obj mouse.obj $(LIBS).lib
+	$(LINK) /x c0$(MODEL) main emu hw_emu telnet printf key kermit stat ring mouse, tn,, \
+	$(LIBS) c$(MODEL)
+
+.c.obj :
+	$(CC) -c $(COPTIONS) $*.c
+
+.asm.obj :
+	$(ASM) $(AOPTIONS) $*;
+
+clean :
+	@if exist *.~*  erase *.~*
+	@if exist *.obj erase *.obj
+	@if exist *.map erase *.map
+	@if exist *.exe erase *.exe
+	@if exist *.com erase *.com
+	@if exist *.lib erase *.lib
+	@if exist *.bak erase *.bak
+	@if exist *.lst erase *.lst
+	@if exist xxx   erase xxx

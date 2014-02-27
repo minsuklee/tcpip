@@ -1,0 +1,48 @@
+127.0.0.1	localhost
+128.134.16.1	sdnsnucom.snu.ac.kr	sdnsnucom # Inet addr in SDN, khyoo
+147.46.133.2	snucom.snu.ac.kr	snucom	# Inet addr in SNUNET
+137.68.1.1	sorak pgd1
+137.68.1.65	kum
+18.71.0.38      prep.ai.mit.edu
+137.39.1.9	ftp.uu.net
+147.46.80.1	ercc
+147.46.80.99	router
+137.68.1.176	cosmos.kaist.ac.kr   cosmos
+147.46.133.1	jupiter.snu.ac.kr	jupiter		# Dept : SUN 3/52M
+#147.46.133.21	sparc.snu.ac.kr		sparc		# 1  Solbourne 	38-417
+147.46.10.152	archi.snu.ac.kr		archi 		# 2  TG W.S A	102-306
+147.46.10.155	snow.snu.ac.kr		snow 		# 2  TG W.S A	102-306
+147.46.10.151	lab.snu.ac.kr		lab 		# 2  TG W.S A	102-306
+147.46.133.22	gamma.snu.ac.kr		gamma loghost	# 3  TG W.S B	38-417
+147.46.220.26	likel.snu.ac.kr		likel		# 6  (386/AT)	yschang
+147.46.10.157	dandelion.snu.ac.kr	dandelion	# SDT-200	symin
+147.46.142.5   venus2.snu.ac.kr     venus2
+147.6.7.195 twin
+147.46.80.25 sis
+147.6.11.151 kids
+147.46.83.201 hitel
+193.10.10.2	sliphost
+
+193.10.9.1	luna
+193.10.9.2	artemis
+193.10.9.3	moon
+193.10.9.4	diana
+193.10.9.5	dall
+193.10.9.6	weol
+193.10.9.7	khyoo
+193.10.9.8	helios
+193.10.9.9	jupiter
+193.10.9.10	majong
+193.10.9.11	yangjae	
+193.10.9.12	virgin
+193.10.9.13	venus
+193.10.9.14	pluto
+193.10.9.15	budda
+193.10.9.16	angel
+193.10.9.17	power
+193.10.9.44	sunny
+193.10.9.50	marines
+193.10.9.80	namu
+193.10.9.100	pktdrv
+193.10.9.20	mars
+

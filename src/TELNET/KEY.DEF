@@ -1,0 +1,153 @@
+#
+# Telnet KeyBoard Definition File, Version 2.00,
+# (C) Copyright 1991,1993  IMIGE Systems Inc.,  All Rights Reserved.
+#
+# All rights reserved.
+# This software is under BSD license. see LICENSE.txt
+#  Author : Minsuk Lee (ykhl1itj@gmail.com)
+#
+#  A_   : Alt Keys
+#  S_   : Shift Keys
+#  C_   : CTRL 
+#
+#  ^[   : ESC itself
+#  ^*   : CTRL * Key (^A = Ctrl-A) , * should be Uppcase Character
+#  ^^   : ^ itself
+#  ^x** : hexadecimal value **, ** should be from 00 to FF
+#
+#-------------------------------------------------------
+# Reserved Keys
+#
+#	ALT_F10 : Local Command ESCAPE
+#	ALT_F9	: Push MS-DOS
+#	ALT_F8  : Excute macro String as an MS-DOS commands
+#	ALT_F7	: Reserved
+#	ALT_F6	: ReLoad KEY.DEF and remap all Macros
+#	ALT_Fx	: Change to Connection x
+#
+#-------------------------------------------------------
+# IBM-KEY       MAPPED_KEY
+#--------------------------
+# Cursor Key Group
+#----------------------------------------
+  "UP"		"^[OA"
+  "DOWN"	"^[OB"
+  "LEFT"	"^[OD"
+  "RIGHT"	"^[OC"
+#-----------  Defined vi Commands
+  "HOME"	"^^"
+  "END"		"$"
+  "PGUP"	"^B"
+  "PGDN"	"^F"
+#-----------
+  "INS"		""
+  "DEL"		"^x7f"		; DEL Key Ascii:127(0x7f)
+#-----------
+  "C_LEFT"	"b"
+  "C_RIGHT"	"w"
+#-----------
+  "C_HOME"	"H"
+  "C_END"	""
+  "C_PGUP"	"1G"
+  "C_PGDN"	"G"
+#--------------------------
+# ALT-Aphabet Group
+#
+# User Can allocate Short Cut Key Macro Here
+#-------------------------------------------
+  "A_A"		""
+  "A_B"		"\end{verbatim}"
+  "A_C"		""
+  "A_D"		""
+  "A_E"		"\end{itemize}"
+  "A_F"		"\end{list}"
+  "A_G"		""
+# "A_H"		"" 
+  "A_I"		"\begin{itemize}"
+  "A_J"		""
+  "A_K"		""
+  "A_L"		"\begin{list}{--}{}"
+  "A_M"		""
+  "A_N"		""
+  "A_O"		""
+  "A_P"		"finger symin@dandelion.snu.ac.kr | grep 1994^x0d"
+  "A_Q"		""
+  "A_R"		"repeat 100 cat /etc/termcap"
+  "A_S"		""
+  "A_T"		""
+  "A_U"		""
+  "A_V"		"\begin{verbatim}"
+  "A_W"		""
+  "A_X"		""
+  "A_Y"		""
+  "A_Z"		""
+#--------------------------
+# Alt Number Group
+#-----------			Emulate VT100 Numeric Key Pad
+  "A_1"		"^[Op"
+  "A_2"		"^[Oq"
+  "A_3"		"^[Or"
+  "A_4"		"^[Os"
+  "A_5"		"^[Ot"
+  "A_6"		"^[Ou"
+  "A_7"		"^[Ov"
+  "A_8"		"^[Ow"
+  "A_9"		"^[Ox"
+  "A_0"		"^[Oy"
+#--------------------------
+# Funtion Key Group
+#-----------
+  "F1"		"^[OP"		; VT100 PF1
+  "F2"		"^[OQ"
+  "F3"		"^[OR"
+  "F4"		"^[OS"		; VT100 PF4
+  "F5"		""
+  "F6"		"^[[17~"	; VT200 F6
+  "F7"		"^[[18~"
+  "F8"		"^[[19~"
+  "F9"		"^[[20~"
+  "F10"		"^[[21~"
+#-----------
+  "S_F1"	"^[[23~"	; VT200 F11
+  "S_F2"	"^[[24~"
+  "S_F3"	"^[[25~"
+  "S_F4"	"^[[26~"	; VT200 F14
+  "S_F5"	"^[[28~"	; VT220 HELP
+  "S_F6"	"^[[29~"	; VT220 DO
+  "S_F7"	"^[[31~"
+  "S_F8"	"^[[32~"
+  "S_F9"	"^[[33~"
+  "S_F10"	"^[[34~"
+#-----------
+  "C_F1"	""
+  "C_F2"	""
+  "C_F3"	""
+  "C_F4"	""
+  "C_F5"	""
+  "C_F6"	""
+  "C_F7"	""
+  "C_F8"	""
+  "C_F9"	""
+  "C_F10"	""
+#-----------------------------------------------
+# All ALT-Function Key is Reserved by TELNET
+#
+#  "A_F1"	""	: Select Connection 1
+#  "A_F2"	""	:		    2
+#  "A_F3"	""	:		    3
+#  "A_F4"	""	:		    4
+#  "A_F5"	""	:		    5
+#  "A_F6"	""	: Refresh KEY.DEF
+#  "A_F7"	""	: File Receive
+#  "A_F8"	""	: File Send
+#  "A_F9"	: Direct RUN DOS Command without invoking MS-DOS
+#   ex) "dir"   : normal dir
+#	"dir&"  : dir and pause for a key input
+   "A_F9"	"dir&"	: Run This Command
+#  "A_F10"	""	: Push Command Menu
+#-----------------------------------------------
+# Miscellaneous Key Group
+#-----------
+  "S_TAB"	""
+# Do not Delete Next Line
+#$END

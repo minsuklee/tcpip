@@ -1,0 +1,63 @@
+#   IMIGE/TCP, Copyright (C) 1995, IMIGE Systems Inc.
+#
+# This makefile need Borland C++ 3.1
+#
+
+TC = C:\BORLANDC
+TCDIR = $(TC)\BIN
+TCLIB = $(TC)\LIB
+
+#WORKDIR = D:\MSLEE\IMIGE\NEWTCP\KERNEL
+WORKDIR = ..
+INC = -I$(WORKDIR)\INCLUDE -I$(WORKDIR)\KERNEL
+DEFINE =
+COPTIONS = -c -m$(MODEL) -O2 -G -f- $(INC) $(DEFINE)
+CC = $(TCDIR)\BCC
+
+AOPTIONS = /t
+ASM = $(TCDIR)\TASM
+
+LIB = $(TCDIR)\TLIB
+
+LINK = $(TCDIR)\TLINK
+
+OBJ0  = inittcp.obj tcpstat.obj findtsr.obj geterror.obj rdconf.obj
+OBJ1  = socket.obj sendto.obj recvfrom.obj ioctl.obj select.obj
+OBJ2  = accept.obj bind.obj listen.obj connect.obj
+OBJ3  = async.obj recv.obj send.obj readv.obj writev.obj
+OBJ4  = getpeer.obj getsock.obj setopt.obj getopt.obj
+OBJ5  = shutdown.obj tcperror.obj resvport.obj rcmd.obj rexec.obj
+OBJ6  = hostbyna.obj hostbyad.obj resolve.obj
+OBJ7  = in_addr.obj in_lnaof.obj in_makea.obj
+OBJ8  = in_netof.obj in_netwo.obj in_ntoa.obj
+OBJ9  = gethosti.obj gethostn.obj getlogin.obj getdomai.obj gettimeo.obj
+OBJ10 = lswap.obj bswap.obj bcopy.obj bcmp.obj bzero.obj
+OBJ11 = asy_conn.obj asy_acce.obj netclose.obj
+
+TCPOBJS = $(OBJ0) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
+          $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11)
+
+APPLIB = IMIGE_T$(MODEL).LIB
+
+all : $(TCPOBJS)
+
+.asm.obj:
+	$(ASM) $(AOPTIONS) $*;
+	$(LIB) $(APPLIB) -+ $*.obj
+	@if exist *.bak erase *.bak
+
+.c.obj:
+	$(CC) $(COPTIONS) $*.c
+	$(LIB) $(APPLIB) -+ $*.obj
+	@if exist *.bak erase *.bak
+
+clean :
+	@if exist *.~*  erase *.~*
+	@if exist *.obj erase *.obj
+	@if exist *.map erase *.map
+	@if exist *.exe erase *.exe
+	@if exist *.com erase *.com
+	@if exist *.bak erase *.bak
+	@if exist *.lst erase *.lst
+	@if exist xxx erase xxx
+	@if exist *.lib erase *.lib

@@ -1,0 +1,55 @@
+#  IMIGE/TCP, Copyright (C) 1995, IMIGE Systems Inc.
+# 
+#  All rights reserved.
+#  This software is under BSD license. see LICENSE.txt
+#
+#  Author : Minsuk Lee (ykhl1itj@gmail.com)
+#
+all:
+	@cd library
+	#make -DMODEL=l
+	@call large
+	@if exist *.bak erase *.bak
+	cd ..\kernel
+	make
+	@if exist *.bak erase *.bak
+	cd ..\util
+	make
+	cd ..\telnet
+	make
+	cd ..
+
+clean:
+	@echo Clean:
+	@echo -----
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd kernel
+	@echo Kernel.....
+	@make clean > nul
+	@cd ..\util
+	@echo Util.......
+	@make clean > nul
+	@cd ..\library
+	@echo Library....
+	@make clean > nul
+	@cd ..\telnet
+	@echo ...........telnet
+	@make clean > nul
+	@cd ..\include
+	@echo Include....
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd imigetcp
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd ..\sys
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd ..\arpa
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd ..\netinet
+	@if exist *.~* erase *.~*
+	@if exist *.bak erase *.bak
+	@cd ..\..
