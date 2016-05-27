@@ -1,6 +1,6 @@
 tcpip
 =====
-This is a clean TCP/IP implementation for MS-DOS, Windows 3.x or
+This is a clean-room TCP/IP implementation for MS-DOS, Windows 3.x or
 Microsoft operating systems earlier than Windows 95.
 
 It can be built with Borland C 3.0, and MS Macro Assembler.
