@@ -8,11 +8,15 @@ hmm, It's quite old,
 so don't expect clean compilation with contemporary tools.
 
 This source is BSD licensed.
+
+This TCP/IP is implemented originally for X-Window Server / X-Terminal,
+while I was working for IMIGE Systems Inc.
+
 I wrote whole code from scratch.
 (Yes, some of headers were C&P'ed from ..., you know.)
 
 IMIGE Systems Inc., an ancient company I worked for
-does not exist on earth any more.
+does not exist on the Earth any more.
 
 Let me know any issues on the source.
 
